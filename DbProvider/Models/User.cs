@@ -24,8 +24,11 @@ namespace DbProvider.Models
         public DateTime RegistrationDate { get; set; }
 
 
+        [JsonIgnore]
         public virtual ICollection<Role> Roles { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Chat> Chats { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
     }
 }

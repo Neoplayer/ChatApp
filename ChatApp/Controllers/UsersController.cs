@@ -1,5 +1,5 @@
 ﻿using ChatApp.Helpers;
-using ChatApp.Models;
+using ChatApp.Models.User;
 using ChatApp.Services;
 using Microsoft.AspNetCore.Mvc;
 

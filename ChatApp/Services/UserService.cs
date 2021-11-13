@@ -1,5 +1,6 @@
 ﻿using ChatApp.Helpers;
 using ChatApp.Models;
+using ChatApp.Models.User;
 using DbProvider;
 using DbProvider.Models;
 using Microsoft.EntityFrameworkCore;

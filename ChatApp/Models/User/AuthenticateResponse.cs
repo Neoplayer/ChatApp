@@ -1,6 +1,4 @@
-﻿using DbProvider.Models;
-
-namespace ChatApp.Models
+﻿namespace ChatApp.Models.User
 {
     public class AuthenticateResponse
     {
@@ -11,7 +9,7 @@ namespace ChatApp.Models
         public string Token { get; set; }
 
 
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponse(DbProvider.Models.User user, string token)
         {
             Id = user.Id;
             FirstName = user.FirstName;

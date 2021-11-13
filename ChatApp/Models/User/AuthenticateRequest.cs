@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ChatApp.Models
+namespace ChatApp.Models.User
 {
     public class AuthenticateRequest
     {
