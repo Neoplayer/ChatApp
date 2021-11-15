@@ -21,6 +21,12 @@ namespace ChatApp.Services
 
     public class SocialService : ISocialService
     {
+        ISentimentService sentimentService;
+        public SocialService(ISentimentService sentimentService)
+        {
+            this.sentimentService = sentimentService;
+        }
+
         public Chat CreateChat(User user, string name, ChatType type)
         {
             MainContext context = new MainContext();
@@ -81,7 +87,8 @@ namespace ChatApp.Services
                 Sender = context.Users.FirstOrDefault(x => x.Id == user.Id),
                 Body = body,
                 DateTime = DateTime.Now,
-                Chat = context.Chats.FirstOrDefault(x => x.Id == chatId)
+                Chat = context.Chats.FirstOrDefault(x => x.Id == chatId),
+                Sentiment = sentimentService.Predict(body)
             };
 
             context.Messages.Add(message);

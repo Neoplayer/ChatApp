@@ -35,8 +35,8 @@ namespace ChatApp.Services
         {
             _appSettings = appSettings.Value;
 
-
             MainContext context = new MainContext();
+
             _users = context.Users;
 
         }
@@ -81,7 +81,9 @@ namespace ChatApp.Services
 
         public User GetById(int id)
         {
-            return _users.FirstOrDefault(x => x.Id == id);
+            MainContext context = new MainContext();
+
+            return context.Users.Include(x => x.Messages).FirstOrDefault(x => x.Id == id);
         }
 
         // helper methods

@@ -24,6 +24,9 @@ namespace DbProvider.Models
         public DateTime RegistrationDate { get; set; }
 
 
+        public float AvgSentiment => Messages?.Average(x => x.Sentiment) ?? throw new Exception("Message Include Exception");
+        
+
         [JsonIgnore]
         public virtual ICollection<Role> Roles { get; set; }
         [JsonIgnore]

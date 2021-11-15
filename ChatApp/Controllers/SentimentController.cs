@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.ML;
 using Microsoft.AspNetCore.Mvc;
-using MLCore.ML.DataModels;
+using ChatApp.Services;
 
 namespace ChatApp.Controllers
 {
@@ -9,32 +9,29 @@ namespace ChatApp.Controllers
     [Route("[controller]")]
     public class SentimentController : ControllerBase
     {
-        private readonly PredictionEnginePool<SampleObservation, SamplePrediction> _predictionEnginePool;
+        // private readonly PredictionEnginePool<SampleObservation, SamplePrediction> _predictionEnginePool;
 
-        public SentimentController(PredictionEnginePool<SampleObservation, SamplePrediction> predictionEnginePool)
+        // public SentimentController(PredictionEnginePool<SampleObservation, SamplePrediction> predictionEnginePool)
+        // {
+        //     // Get the ML Model Engine injected, for scoring
+        //     _predictionEnginePool = predictionEnginePool;
+        // }
+        private readonly ISentimentService _service;
+
+        public SentimentController(ISentimentService service)
         {
             // Get the ML Model Engine injected, for scoring
-            _predictionEnginePool = predictionEnginePool;
+            _service = service;
         }
 
 
-        [HttpGet("remove_chat")]
+        [HttpGet("predict")]
         public IActionResult PredictSentiment(string sentimentText)
         {
-            // Predict sentiment using ML.NET model
-            SampleObservation sampleData = new SampleObservation { Col0 = sentimentText };
-            
-            // Predict sentiment
-            SamplePrediction prediction = _predictionEnginePool.Predict(sampleData);
-            
-            float percentage = 100 * (1.0f / (1.0f + (float)Math.Exp(-prediction.Score))); //CalculatePercentage(prediction.Score);
+            var percentage = _service.Predict(sentimentText);
 
             return Ok(percentage);
         }
 
-        // public float CalculatePercentage(double value)
-        // {
-        //     return 100 * (1.0f / (1.0f + (float)Math.Exp(-value)));
-        // }
     }
 }

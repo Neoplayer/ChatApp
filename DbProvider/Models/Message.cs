@@ -13,6 +13,7 @@ namespace DbProvider.Models
 
         public string SenderName => Sender.Username;
         public string Body { get; set; }
+        public float Sentiment { get; set; }
         public DateTime DateTime { get; set; }
 
         [JsonIgnore]

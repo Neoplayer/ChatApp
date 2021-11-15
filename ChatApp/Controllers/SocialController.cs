@@ -13,9 +13,9 @@ namespace ChatApp.Controllers
     {
         ISocialService socialService;
 
-        public SocialController(ISocialService service)
+        public SocialController(ISocialService socialService)
         {
-            socialService = service;
+            this.socialService = socialService;
         }
 
 
