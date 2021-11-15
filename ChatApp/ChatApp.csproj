@@ -13,6 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
+
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.0-preview.final" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="1.7.0-preview.final" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DbProvider\DbProvider.csproj" />
+    <ProjectReference Include="..\MLCore\MLCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MLSentimentModel.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

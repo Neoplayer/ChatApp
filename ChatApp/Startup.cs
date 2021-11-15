@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ML;
 using Microsoft.OpenApi.Models;
+using MLCore.ML.DataModels;
 
 namespace ChatApp
 {
@@ -36,6 +38,9 @@ namespace ChatApp
 
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.AddPredictionEnginePool<SampleObservation, SamplePrediction>()
+                    .FromFile("MLSentimentModel.zip");
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();

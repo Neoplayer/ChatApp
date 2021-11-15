@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.Extensions.ML;
 using Microsoft.AspNetCore.Mvc;
-using BlazorSentiment.Server.ML.DataModels;
+using MLCore.ML.DataModels;
 
-namespace _123.Server.Controllers
+namespace ChatApp.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class SentimentController : ControllerBase
     {
         private readonly PredictionEnginePool<SampleObservation, SamplePrediction> _predictionEnginePool;
@@ -17,9 +17,9 @@ namespace _123.Server.Controllers
             _predictionEnginePool = predictionEnginePool;
         }
 
-        [HttpGet("[action]")]
-        [Route("sentimentprediction")]
-        public ActionResult<float> PredictSentiment([FromQuery]string sentimentText)
+
+        [HttpGet("remove_chat")]
+        public IActionResult PredictSentiment(string sentimentText)
         {
             // Predict sentiment using ML.NET model
             SampleObservation sampleData = new SampleObservation { Col0 = sentimentText };
@@ -27,14 +27,14 @@ namespace _123.Server.Controllers
             // Predict sentiment
             SamplePrediction prediction = _predictionEnginePool.Predict(sampleData);
             
-            float percentage = CalculatePercentage(prediction.Score);
+            float percentage = 100 * (1.0f / (1.0f + (float)Math.Exp(-prediction.Score))); //CalculatePercentage(prediction.Score);
 
-            return percentage;
+            return Ok(percentage);
         }
 
-        public float CalculatePercentage(double value)
-        {
-            return 100 * (1.0f / (1.0f + (float)Math.Exp(-value)));
-        }
+        // public float CalculatePercentage(double value)
+        // {
+        //     return 100 * (1.0f / (1.0f + (float)Math.Exp(-value)));
+        // }
     }
 }
