@@ -22,7 +22,7 @@ namespace ChatApp.Controllers
         #region Chat
 
         [Authorize]
-        [HttpPost("create_chat")]
+        [HttpPost("Chat/Create")]
         public IActionResult CreateChat(CreateChatRequest model)
         {
             var user = HttpContext.Items["User"] as User;
@@ -33,7 +33,7 @@ namespace ChatApp.Controllers
         }
 
         [Authorize]
-        [HttpGet("get_chats")]
+        [HttpGet("Chat/Get")]
         public IActionResult GetChats(ChatType? chatType)
         {
             var user = HttpContext.Items["User"] as User;
@@ -44,7 +44,7 @@ namespace ChatApp.Controllers
         }
 
         [Authorize]
-        [HttpGet("remove_chat")]
+        [HttpGet("Chat/Remove")]
         public IActionResult RemoveChat(int chatId)
         {
             var user = HttpContext.Items["User"];
@@ -61,14 +61,14 @@ namespace ChatApp.Controllers
         #region Chat
 
         [Authorize]
-        [HttpGet("get_chat_messages")]
+        [HttpGet("Messages/GetChat")]
         public IActionResult GetMessages(int chatId, int? depth)
         {
             return Ok(socialService.GetMessagesByChat(chatId, depth));
         }
 
         [Authorize]
-        [HttpPost("send_message")]
+        [HttpPost("Messages/Send")]
         public IActionResult SendMessage(SendMessageRequest model)
         {
             var user = HttpContext.Items["User"] as User;

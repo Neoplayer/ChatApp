@@ -17,7 +17,7 @@ namespace ChatApp.Controllers
         }
 
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public IActionResult Register(RegisterRequest model)
         {
             var response = _userService.RegisterUser(model);
@@ -28,7 +28,7 @@ namespace ChatApp.Controllers
             return Ok(response);
         }
 
-        [HttpPost("authenticate")]
+        [HttpPost("Authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
             var response = _userService.Authenticate(model);
@@ -48,7 +48,7 @@ namespace ChatApp.Controllers
         //}
 
         [Authorize]
-        [HttpGet("get_user")]
+        [HttpGet("GetUser")]
         public IActionResult GetUserData()
         {
             var user = HttpContext.Items["User"];

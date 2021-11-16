@@ -38,7 +38,6 @@ namespace ChatApp.Services
             MainContext context = new MainContext();
 
             _users = context.Users;
-
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)

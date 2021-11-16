@@ -25,7 +25,7 @@ namespace ChatApp.Controllers
         }
 
 
-        [HttpGet("predict")]
+        [HttpGet("Predict")]
         public IActionResult PredictSentiment(string sentimentText)
         {
             var percentage = _service.Predict(sentimentText);
