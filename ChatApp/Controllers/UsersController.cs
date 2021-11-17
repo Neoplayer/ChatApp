@@ -25,7 +25,13 @@ namespace ChatApp.Controllers
             if (response == false)
                 return BadRequest(new { message = "Registration error" });
 
-            return Ok(response);
+            var token = _userService.Authenticate(new AuthenticateRequest()
+            {
+                Username = model.Username,
+                Password = model.Password
+            });
+
+            return Ok(new { status = response, token = token.Token });
         }
 
         [HttpPost("Authenticate")]
@@ -48,14 +54,14 @@ namespace ChatApp.Controllers
         //}
 
         [Authorize]
-        [HttpGet("GetUser")]
+        [HttpGet("GetUser   ")]
         public IActionResult GetUserData()
         {
             var user = HttpContext.Items["User"];
 
-            if(user == null)
+            if (user == null)
             {
-                return(BadRequest("Auth error!"));
+                return (BadRequest("Auth error!"));
             }
             return Ok(user);
         }
