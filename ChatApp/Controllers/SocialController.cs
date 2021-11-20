@@ -62,9 +62,16 @@ namespace ChatApp.Controllers
 
         [Authorize]
         [HttpGet("Messages/GetChat")]
-        public IActionResult GetMessages(int chatId, int? depth)
+        public IActionResult GetMessages(int chatId, int? count, int? page)
         {
-            return Ok(socialService.GetMessagesByChat(chatId, depth));
+            return Ok(socialService.GetMessagesByChat(chatId, count ?? 500, page ?? 1));
+        }
+
+        [Authorize]
+        [HttpGet("Messages/GetLast")]
+        public IActionResult GetLastMessages(int chatId, int messageId)
+        {
+            return Ok(socialService.GetLastMessagesByChat(chatId, messageId));
         }
 
         [Authorize]

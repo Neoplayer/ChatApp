@@ -16,6 +16,10 @@ namespace DbProvider.Models
         public float Sentiment { get; set; }
         public DateTime DateTime { get; set; }
 
+
+        public int ChatId { get; set; }
+
+
         [JsonIgnore]
         public Chat Chat { get; set; }
         [JsonIgnore]

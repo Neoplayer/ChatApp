@@ -15,8 +15,9 @@ namespace ChatApp.Services
         bool RemoveChat(Chat chat, User user);
 
 
-        ICollection<Message> GetMessagesByChat(int chatId, int? depth);
-        Message SendMessage(User user,int chatId, string body);
+        ICollection<Message> GetMessagesByChat(int chatId, int count, int page);
+        ICollection<Message> GetLastMessagesByChat(int chatId, int lastMessageId);
+        Message SendMessage(User user, int chatId, string body);
     }
 
     public class SocialService : ISocialService
@@ -69,14 +70,33 @@ namespace ChatApp.Services
         }
 
 
-        public ICollection<Message> GetMessagesByChat(int chatId, int? depth)
+        public ICollection<Message> GetMessagesByChat(int chatId, int count, int page)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
 
-            return context.Chats.Include(x => x.Messages).ThenInclude(x => x.Sender).FirstOrDefault(x => x.Id == chatId)?.Messages?.OrderByDescending(x => x.DateTime)?.Take(depth ?? 500)?.ToList();
+            return context
+                        .Chats
+                        .Include(x => x.Messages)
+                        .ThenInclude(x => x.Sender)
+                        .FirstOrDefault(x => x.Id == chatId)?
+                        .Messages?
+                        .OrderByDescending(x => x.DateTime)?
+                        .Skip((page - 1) * count)?
+                        .Take(count)?
+                        .OrderBy(x => x.DateTime)?
+                        .ToList();
         }
 
+        public ICollection<Message> GetLastMessagesByChat(int chatId, int lastMessageId)
+        {
+            using MainContext context = new MainContext();
 
+            var lastMessage = context.Messages.FirstOrDefault(x => x.Id == lastMessageId);
+
+            var messages = context.Messages.Where(x => x.ChatId == chatId && lastMessage.DateTime < x.DateTime).ToList();
+
+            return messages;
+        }
 
         public Message SendMessage(User user, int chatId, string body)
         {
