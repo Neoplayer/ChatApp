@@ -19,7 +19,6 @@ namespace ChatApp.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         bool RegisterUser(RegisterRequest model);
-        IEnumerable<User> GetAll();
         User GetById(int id);
     }
 
@@ -27,22 +26,19 @@ namespace ChatApp.Services
     {
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private DbSet<User> _users;
 
         private readonly AppSettings _appSettings;
 
         public UserService(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
-
-            MainContext context = new MainContext();
-
-            _users = context.Users;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            using MainContext context = new MainContext();
+
+            var user = context.Users.Include(x => x.Messages).SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) return null;
@@ -55,7 +51,7 @@ namespace ChatApp.Services
 
         public bool RegisterUser(RegisterRequest model)
         {
-            // TODO check user
+            // TODO check user exist and validate email
             using MainContext context = new MainContext();
 
             User user = new User()
@@ -74,14 +70,9 @@ namespace ChatApp.Services
             return true;
         }
 
-        public IEnumerable<User> GetAll()
-        {
-            return _users;
-        }
-
         public User GetById(int id)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
 
             return context.Users.Include(x => x.Messages).FirstOrDefault(x => x.Id == id);
         }
