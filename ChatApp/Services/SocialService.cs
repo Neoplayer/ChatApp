@@ -93,7 +93,7 @@ namespace ChatApp.Services
 
             var lastMessage = context.Messages.FirstOrDefault(x => x.Id == lastMessageId);
 
-            var messages = context.Messages.Where(x => x.ChatId == chatId && lastMessage.DateTime < x.DateTime).ToList();
+            var messages = context.Messages.Where(x => x.ChatId == chatId && lastMessage.DateTime < x.DateTime).Include(x => x.Sender).ToList();
 
             return messages;
         }
