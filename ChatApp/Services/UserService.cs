@@ -56,16 +56,17 @@ namespace ChatApp.Services
         public bool RegisterUser(RegisterRequest model)
         {
             // TODO check user
+            using MainContext context = new MainContext();
 
             User user = new User()
             {
                 Email = model.Email,
                 Password = model.Password,
                 Username = model.Username,
-                RegistrationDate = DateTime.Now
+                RegistrationDate = DateTime.Now,
+                Chats = new List<Chat>(context.Chats.Where(x => x.ChatType == ChatType.Global))
             };
 
-            MainContext context = new MainContext();
 
             context.Users.Add(user);
             context.SaveChanges();

@@ -30,7 +30,7 @@ namespace ChatApp.Services
 
         public Chat CreateChat(User user, string name, ChatType type)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
 
             Chat chat = new Chat()
             {
@@ -48,20 +48,25 @@ namespace ChatApp.Services
 
         public ICollection<Chat> GetChatsByUser(User user)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
 
             return context.Chats.Include(x => x.Members).Where(x => x.Members.Contains(user)).ToList();
         }
 
         public ICollection<Chat> GetChatsByUser(User user, ChatType type)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
 
             return context.Chats.Include(x => x.Members).Where(x => x.Members.Contains(user) && x.ChatType == type).ToList();
         }
         public bool RemoveChat(Chat chat, User user)
         {
-            MainContext context = new MainContext();
+            using MainContext context = new MainContext();
+
+            if (chat.ChatType == ChatType.Group)
+            {
+                return false;
+            }
 
             context.Chats.Include(x => x.Members).FirstOrDefault(x => x.Id == chat.Id).Members.Remove(user);
             context.SaveChanges();
