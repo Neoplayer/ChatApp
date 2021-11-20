@@ -25,13 +25,13 @@ namespace ChatApp.Controllers
             if (response == false)
                 return BadRequest(new { message = "Registration error" });
 
-            var token = _userService.Authenticate(new AuthenticateRequest()
+            var result = _userService.Authenticate(new AuthenticateRequest()
             {
                 Username = model.Username,
                 Password = model.Password
             });
 
-            return Ok(new { status = response, token = token.Token });
+            return Ok(new { status = response, user = result });
         }
 
         [HttpPost("Authenticate")]
