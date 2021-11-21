@@ -9,6 +9,7 @@ const LogOut = () => {
     return () => {
       console.log("returned to home page");
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <h1>Please wait ...</h1>;
 };

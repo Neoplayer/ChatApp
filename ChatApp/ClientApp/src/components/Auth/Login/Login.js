@@ -1,77 +1,51 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Auth } from "../../api/user";
+import { Auth, GetUser } from "../../api/user";
 import Context from "../../Context/Context";
 import styles from "./login.module.scss";
 
 const Login = () => {
   let navigate = useNavigate();
-  const { User, setUser } = useContext(Context);
-
-  const [user, setuser] = useState({
-    firstName: null,
-    id: -1,
-    lastName: null,
-    token: "",
-    username: "",
-  });
+  const { setUser } = useContext(Context);
 
   useEffect(() => {
-    const currentMail = localStorage.getItem("email");
-    const currentPass = localStorage.getItem("password");
-    if (
-      currentMail !== null &&
-      currentPass !== null &&
-      currentMail !== undefined &&
-      currentPass !== undefined
-    ) {
-      navigate("/chat");
-      console.log("it user already logIn in system");
+    const currentToken = localStorage.getItem("token");
+    console.log(currentToken);
+    if (currentToken !== null && currentToken !== "") {
+      GetUser(currentToken).then((UserData) => {
+        // console.log(UserData);
+      });
     }
+    // if (
+    //   currentToken !== null && currentToken !== ""
+    // ) {
+    //   navigate("/chat");
+    // }
     return () => {};
   }, []);
-
-  useEffect(() => {
-    if (User.token !== "" && User.id !== -1) {
-      localStorage.setItem("token", User.token);
-      navigate("/chat");
-    }
-  }, [User]);
 
   const SubmitUser = async (e) => {
     e.preventDefault();
     let email = e.currentTarget.elements.email.value;
     let password = e.currentTarget.elements.password.value;
     const res = await Auth(email, password);
-    if(res.message === undefined){
+    console.log(res);
+    if (res.message === undefined && res.token !== "") {
+      localStorage.setItem("token", res.token);
       setUser(res);
       navigate("/chat");
+    } else {
+      console.log("error");
     }
-    else{
-      console.log('error');
-    }
-
-    // setuser(res);
-    // e.preventDefault();
-    // // setEmail(e.currentTarget.elements.email.value);
-    // // setPassword(e.currentTarget.elements.password.value);
-    // localStorage.setItem("email", e.currentTarget.elements.email.value);
-    // localStorage.setItem("password", e.currentTarget.elements.password.value);
-  };
-
-  // delete
-  const Clicked = async () => {
-    const res = await Auth();
-    setuser(res);
   };
 
   return (
     <div className={styles.AuthformWrapper}>
       <form onSubmit={SubmitUser}>
-        <h1>Введите почту и пароль</h1>
+        <h1>Введите логин и пароль</h1>
         <div className={styles.mailpassWrapper}>
           <div>
-            <label>Email:</label>
+            <label>Login:</label>
             <input
               type="text"
               placeholder="email@gmail.com"
@@ -100,10 +74,6 @@ const Login = () => {
           Новый пользователь?
         </button>
       </form>
-
-      <button className={styles.btnAuth} onClick={Clicked}>
-        AUTH FROM API
-      </button>
     </div>
   );
 };

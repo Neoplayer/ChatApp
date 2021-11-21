@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./PersonalAccountPape.module.scss";
 import { Progress } from "antd";
+import Context from "../Context/Context";
 
 const PersonalAccountPape = () => {
+  const { User } = useContext(Context);
   return (
     <div className={styles.accountWrapper}>
       <div className={styles.personalData}>
@@ -17,7 +19,7 @@ const PersonalAccountPape = () => {
                 "0%": "#108ee9",
                 "100%": "#87d068",
               }}
-              percent={80}
+              percent={User.user.avgSentiment.toFixed(2)}
               format={(per) => {
                 if (per === 100) {
                   return "100%!";
@@ -34,23 +36,14 @@ const PersonalAccountPape = () => {
 
           <div className={styles.userinfo}>
             <span>
-              <h3>ФИО</h3>
-              <p>Василий Великий</p>
-            </span>
-            <span>
               <h3>Email</h3>
-              <p>vasok322@gmail.com</p>
+              <p>{User.user.email}</p>
             </span>
             <span>
               <h3>Login</h3>
-              <p>HaHaITsVasok</p>
-            </span>
-            <span>
-              <h3>Дата рождения</h3>
-              <p>01.01.2005</p>
+              <p>{User.user.username}</p>
             </span>
           </div>
-
         </div>
       </div>
     </div>

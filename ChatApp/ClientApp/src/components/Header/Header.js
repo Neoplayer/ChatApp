@@ -1,21 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
-import Context from "../Context/Context";
+
 import "./Header.scss";
 
 const Header = () => {
-  // const currentMail = localStorage.getItem("email");
-  // const currentPass = localStorage.getItem("password");
   const [Linker, setLinker] = useState([]);
-  
-  const {User} = useContext(Context)
-  
   let location = useLocation();
   
   useEffect(() => {
     const currentToken = localStorage.getItem("token");
-    if (User.id === -1 || User.token === "" || currentToken === null) {
+    if (currentToken === null ||currentToken === "" ) {
       setLinker([
         {
           url: "/",

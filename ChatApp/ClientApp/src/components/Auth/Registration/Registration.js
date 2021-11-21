@@ -1,33 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { RegistrationNewUser } from "../../api/user";
+import Context from "../../Context/Context";
 import styles from "./Registration.module.scss";
 
 const Registration = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(Context);
 
   useEffect(() => {
-    const currentMail = localStorage.getItem("email");
-    const currentPass = localStorage.getItem("password");
-    if (
-      currentMail !== null &&
-      currentPass !== null &&
-      currentMail !== undefined &&
-      currentPass !== undefined
-    ) {
-      navigate("/chat");
+    const currentToken = localStorage.getItem("token");
+    if (currentToken !== null && currentToken !== "") {
       console.log("it user already logIn in system");
+      navigate("/chat");
     }
-    return () => {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const SubmitNewUser = (e) => {
+  const SubmitNewUser = async (e) => {
     e.preventDefault();
-    // setEmail(e.currentTarget.elements.email.value);
-    // setPassword(e.currentTarget.elements.password.value);
-    localStorage.setItem("email", e.currentTarget.elements.email.value);
-    localStorage.setItem("password", e.currentTarget.elements.password.value);
-    localStorage.setItem("login", e.currentTarget.elements.login.value);
-    navigate("/chat");
+    const email = e.currentTarget.elements.email.value;
+    const login = e.currentTarget.elements.login.value;
+    const password = e.currentTarget.elements.password.value;
+    const res = await RegistrationNewUser(email, login, password);
+    console.log(res);
+    if (res.message === undefined && res.status === true) {
+      localStorage.setItem("token", res.user.token);
+      setUser(res.user)
+      navigate("/chat");
+    } else {
+      console.log("error with registration");
+    }
   };
 
   return (

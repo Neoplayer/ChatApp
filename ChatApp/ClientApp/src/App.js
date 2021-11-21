@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router";
+import { useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router";
 import "./App.css";
 import Login from "./components/Auth/Login/Login";
 import LogOut from "./components/Auth/LogOut/LogOut";
@@ -12,30 +12,33 @@ import PersonalAccountPape from "./components/Personal Account/PersonalAccountPa
 import "./fonts/Roboto/Roboto.css";
 
 const App = () => {
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({ username: "Admin", password: "1234" }),
-  // };
-
-  // const headers = {
-  //   Authorization:
-  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MzY4MjE4NzUsImV4cCI6MTYzNzQyNjY3NCwiaWF0IjoxNjM2ODIxODc1fQ.a1oc01VwIvrJjpcqbRgzrA9JCaiKtoIXxahT6_9AY0w",
-  // };
-
-  // fetch("http://172.18.47.81:5000/Users/authenticate", requestOptions)
-  //   .then((response) => response.json())
-  //   .then((res) => console.log(res));
+  let location = useLocation();
 
   const [User, setUser] = useState({
-    id: -1,
-    firstName: null,
-    lastName: null,
-    username: "",
-    token: "",
-    message: "",
+    user: {
+      id: -1,
+      email: null,
+      username: null,
+      firstName: null,
+      lastName: null,
+      middleName: null,
+      ages: null,
+      registrationDate: "0001-01-01T00:00:00",
+      avgSentiment: 0,
+    },
+    token: null,
   });
   console.log("User", User);
+
+  useEffect(() => {
+    const currentToken = localStorage.getItem("token");
+
+    if (currentToken == null || currentToken === "") {
+      localStorage.removeItem("token");
+      // navigate("/");
+    }
+  }, [location.pathname]);
+
   const contx = { User, setUser };
 
   return (
